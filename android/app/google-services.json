@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "336888441742",
+    "firebase_url": "https://admob-94cdf.firebaseio.com",
+    "project_id": "admob-94cdf",
+    "storage_bucket": "admob-94cdf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:336888441742:android:5e13ec06ab101d1d",
+        "android_client_info": {
+          "package_name": "com.newadd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "336888441742-o88tnkf1klr5e8bi2b9oe9d69ufbk6ao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_03Upz53Y3P_49dvFYT1kqztFubFMAzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "336888441742-o88tnkf1klr5e8bi2b9oe9d69ufbk6ao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
