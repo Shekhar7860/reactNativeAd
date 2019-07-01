@@ -17,6 +17,7 @@
     "react-native-imagepicker": "^2.0.0",
     "react-native-modal-datetime-picker": "^7.4.2",
     "react-native-permissions": "^1.1.1",
+    "react-native-splash-screen": "^3.0.6",
     "react-native-vector-icons": "^5.0.0",
     "react-navigation": "^2.14.0",
     "tcomb-form-native": "^0.6.16"

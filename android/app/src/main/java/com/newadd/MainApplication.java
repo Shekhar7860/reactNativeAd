@@ -3,6 +3,7 @@ package com.newadd;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -13,6 +14,7 @@ import com.facebook.soloader.SoLoader;
 import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 import java.util.Arrays;
 import java.util.List;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage; 
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
@@ -28,13 +30,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SplashScreenReactPackage(),
             new VectorIconsPackage(),
             new ImagePickerPackage(),
             new RNFetchBlobPackage(),
           new RNFirebaseAdMobPackage(),
           new RNFirebasePackage(),
           new RNFirebaseDatabasePackage(),
-          new RNFirebaseStoragePackage() 
+          new RNFirebaseStoragePackage(),
+            new RNFirebaseMessagingPackage()
       );
     }
 

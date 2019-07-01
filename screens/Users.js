@@ -3,7 +3,12 @@ import React, { Component } from 'react';
 import { List, ListItem } from "react-native-elements"
 import Icon from "react-native-vector-icons/Ionicons";
 import { db } from './config';
-
+import firebase from 'react-native-firebase';
+const Banner = firebase.admob.Banner;
+const AdRequest = firebase.admob.AdRequest;
+const advert = firebase.admob().interstitial('ca-app-pub-8707066328646930/8992858119')
+const request = new AdRequest();
+request.addKeyword('foobar');
 export default class Users extends Component {
   constructor(props){
    super(props)
@@ -21,6 +26,20 @@ state = {
   firebaseImage : ""
 }
   componentDidMount() {
+      advert.loadAd(request.build());
+
+advert.on('onAdLoaded', () => {
+  console.log('Advert ready to show.');
+});
+
+setTimeout(() => {
+  if (advert.isLoaded()) {
+    console.log('working')
+    advert.show();
+  } else {
+    console.log('error occured')
+  }
+}, 1000);
     db.ref('/images').child('army').once('value')
     .then((dataSnapshot) => {
       
@@ -50,8 +69,8 @@ state = {
   
   static navigationOptions = function(props) {
     return {
-      title: 'Users',
-      headerRight: <View  style={{marginRight: 20, paddingTop:5}}><Icon name="ios-add" size={30} onPress={() => props.navigation.navigate('ScreenTwo')}   /></View>
+      title: 'Products'
+     // headerRight: <View  style={{marginRight: 20, paddingTop:5}}><Icon name="ios-add" size={30} onPress={() => props.navigation.navigate('ScreenTwo')}   /></View>
     }
   };
   editUser = (val) => {
@@ -86,32 +105,52 @@ state = {
     return (
      
       <View style={styles.container} >
+     
        {this.state.items !== [] ?
           <FlatList
           data={this.state.items}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) =>
+          <View>
           <View style={styles.flatview} >
-          <View style={{width:'10%'}}></View>
+          <View style={{width:'5%'}}></View>
            <Image
             source={{ uri: item.photo }}
             style={{ width: 100, height: 100, borderRadius : 50 }}
           />
-          <View style={{width:'5%'}}></View>
            <View style={{marginTop:5}}>
+             <View style={{width:'100%'}}>
             <Text style={styles.name} onPress={() => this.editUser(item)}>{item.name}</Text>
-            <Text style={styles.email}>{item.email}</Text>
-            <Icon name="ios-trash" size={30} onPress={() => this.deleteItem(item)}/>
             </View>
-            <View style={{width:'10%'}}></View>
+            </View>   
           </View>
-         
-            
-         
+            <View style={{flexDirection:'row'}} >
+            <View style={{width:'30%'}}></View>
+            <Text style={styles.email}>Qty : {item.age}</Text>
+            <Text> MRP: {item.DateOfBirth} </Text>
+             <View style={{width:'30%'}}></View>
+            </View>
+            <View style={{flexDirection:'row'}}>
+             <View style={{width:'30%'}}></View>
+            <Text> DP : {item.DateOfJoining} </Text>
+             <Text> BV : {item.profile} </Text>
+              <View style={{width:'30%'}}></View>
+             </View>
+              </View>
           }
           keyExtractor={item => item.email}
         />
-     : null }
+     : null }  
+     <View style={styles.footer}>
+       <Banner
+       style={{alignSelf:'center',marginLeft:20}}
+    size={"LARGE_BANNER"}
+  unitId={"ca-app-pub-8707066328646930/7786284317"}
+  request={request.build()}
+  onAdLoaded={() => {
+    console.log('Advert loaded');
+  }} />
+  </View>
       </View>
     );
   }
@@ -138,15 +177,16 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Verdana',
-    fontSize: 18
+    fontSize: 18,
+    width:200,
+    flex: 1, flexWrap: 'wrap'
   },
   email: {
-    color: 'red'
+    
   },
   button: {
     textAlign: 'right',
     marginTop:  -10,
     alignSelf: 'stretch'
   }
-  
 });

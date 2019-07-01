@@ -8,6 +8,11 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import firebase from 'react-native-firebase';
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import Moment from 'moment';
+const Banner = firebase.admob.Banner;
+const AdRequest = firebase.admob.AdRequest;
+const advert = firebase.admob().interstitial('ca-app-pub-8707066328646930/8992858119')
+const request = new AdRequest();
+request.addKeyword('foobar');
 const Form = t.form.Form;
 const User = t.struct({
   email: t.String,
@@ -28,13 +33,17 @@ export default class Add extends Component {
     isDateTimePickerVisible2: false,
     startDateText : '',
     endDateText : '',
+    name : '',
+    benefits: '',
+    dp: '',
+    mrp: ''
     };
    
  }
   handleSubmit () {
    // use that ref to get the form value
    console.log(this._form.getValue(), this.state.imageURL, 'userImage' )
-   if(this._form.getValue() && this.state.imageURL)
+   if(this._form.getValue())
    {
     console.log(this._form.getValue());
     if(this.state.user == " ")
@@ -42,7 +51,7 @@ export default class Add extends Component {
       console.log('this one')
   
       let uid = Math.floor(Math.random()*100) + 1;
-    db.ref('/users').child(uid).set({
+    db.ref('/users').push({
       "id":uid,
       "email": this._form.getValue().email,
       "name": this._form.getValue().name,
@@ -56,7 +65,7 @@ export default class Add extends Component {
    
   }
   else {
- db.ref('/users').child(this.state.user.id).update({
+ db.ref('/users').push({
   "id":this.state.user.id,
   "email": this._form.getValue().email,
   "name": this._form.getValue().name,
@@ -161,6 +170,20 @@ window.Blob = Blob
 
 
   componentDidMount() {
+       advert.loadAd(request.build());
+
+advert.on('onAdLoaded', () => {
+  console.log('Advert ready to show.');
+});
+
+setTimeout(() => {
+  if (advert.isLoaded()) {
+    console.log('working')
+    advert.show();
+  } else {
+    console.log('error occured')
+  }
+}, 1000);
     const {state} = this.props.navigation;
    console.log(state.params);
     if(state.params)
@@ -169,6 +192,10 @@ window.Blob = Blob
    this.setState({startDateText:state.params.user.DateOfJoining});
    this.setState({endDateText:state.params.user.DateOfBirth});
    this.setState({userImage : state.params.user.photo})
+      this.setState({name : state.params.user.name})
+         this.setState({benefits  : state.params.user.email})
+       this.setState({mrp  : state.params.user.DateOfBirth})
+        this.setState({dp  : state.params.user.DateOfJoining})
     }
     else{
       this.setState({user:" "});
@@ -178,7 +205,7 @@ window.Blob = Blob
 
   
   static navigationOptions = {
-    title: "Add User"
+    title: 'Product'
   }
   render() {
     const defaultImg =
@@ -186,50 +213,32 @@ window.Blob = Blob
     console.log(this.state)
     return (
       <View style={styles.container}>
-      <View>
-        <Button
-          title="Select Photo"
-          onPress={() => this.selectPhoto()}
-        />
-        </View>
-        <View  style={{marginTop:20}}>
-      <Button
-          title="Insert"
-         
-          onPress={() => this.handleSubmit()}
-        />
-          </View>
+ <Banner
+       style={{alignSelf:'center',marginLeft:20, marginTop:10}}
+    size={"LARGE_BANNER"}
+  unitId={"ca-app-pub-8707066328646930/4480797848"}
+  request={request.build()}
+  onAdLoaded={() => {
+    console.log('Advert loaded');
+  }} />
+       
+       <Text style={{alignSelf:'center', fontSize :20}}> {this.state.name} </Text>
           <Image
             source={{ uri: this.state.filePath.uri ? this.state.filePath.uri : this.state.userImage }}
-            style={{ width: 150, height: 150, alignSelf:'center', borderRadius:75 }}
+            style={{ width: 200, height: 200, alignSelf:'center', marginTop:2 }}
           />
-          
-            <ScrollView style={{marginBottom:120}}>
-            <Form  ref={c => this._form = c} type={User}  value={this.state.user} style={{flex:1}}/> 
-                <Text style={styles.textFont}> Date Of Joining</Text>
-                  <TouchableOpacity onPress={this._showDateTimePicker} style={styles.postprojectinput}>
-                  <Text style={styles.dateTextColor}>{this.state.startDateText}</Text>
-                </TouchableOpacity>
-                <Text style={styles.textFont}>Date Of Birth</Text>
-                <TouchableOpacity onPress={this._showDateTimePicker2} style={styles.postprojectinput}>
-                  <Text style={styles.dateTextColor}>{this.state.endDateText}</Text>
-                </TouchableOpacity>
-           
-       
-            </ScrollView>
-            <DateTimePicker
-          isVisible={this.state.isDateTimePickerVisible}
-          onConfirm={this._handleDatePicked}
-          onCancel={this._hideDateTimePicker}
-          
-        />
-         <DateTimePicker
-          isVisible={this.state.isDateTimePickerVisible2}
-          onConfirm={this._handleDatePicked2}
-          onCancel={this._hideDateTimePicker2}
-        />
-       
-    
+          <View style={{flex: 1}}>
+         <ScrollView>
+              <Text style={{marginTop:5}}> Benefits </Text>
+          <Text> {this.state.benefits} </Text>
+            <Text style={{marginTop:5}}> MRP Price </Text>
+          <Text> {this.state.mrp} </Text>
+            <Text style={{marginTop:5}}> DP Price </Text>
+          <Text> {this.state.dp} </Text>
+         
+          </ScrollView>
+           </View>
+
         
     </View>
     );
@@ -261,5 +270,10 @@ const styles = StyleSheet.create({
       color : '#AEA9A8',
       padding :4,
       fontSize : 17
-    }
+    },
+     footer : {
+    position : 'absolute',
+    bottom : 20,
+    alignItems:'center'
+  }
 });
