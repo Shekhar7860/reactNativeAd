@@ -13,18 +13,24 @@ import {
   View
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-
+import SplashScreen from 'react-native-splash-screen';
 import Users from './screens/Users';
 import Add from './screens/Add'
+import Welcome from './screens/Welcome'
 import Edit from './screens/Edit'
 
 const AppNavigator = StackNavigator({
+    Welcome: { screen: Welcome
+  },
     ScreenOne: { screen: Users},
     ScreenTwo: { screen: Add},
     ScreenThree: {screen: Edit}
-})
+}, { headerMode: 'none' })
 
 export default class App extends Component {
+  componentDidMount() {
+    SplashScreen.hide()
+  }
   render() {
     return (
       <AppNavigator />

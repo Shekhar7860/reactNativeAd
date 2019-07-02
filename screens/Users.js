@@ -1,30 +1,29 @@
-import {Platform, StyleSheet, Text,Image,  View, FlatList,ListView,  Button, StatusBar, TouchableHighlight} from 'react-native';
+import {Platform, StyleSheet, Text,Image, TouchableOpacity, View, FlatList,ListView,  Button,TouchableNativeFeedback,  StatusBar, TouchableHighlight} from 'react-native';
 import React, { Component } from 'react';
-import { List, ListItem } from "react-native-elements"
-import Icon from "react-native-vector-icons/Ionicons";
+import {  Card, Divider, SearchBar, List, ListItem  } from 'react-native-elements';
 import { db } from './config';
 import firebase from 'react-native-firebase';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
-const advert = firebase.admob().interstitial('ca-app-pub-8707066328646930/8992858119')
+const advert = firebase.admob().interstitial('ca-app-pub-8707066328646930/9890952916')
 const request = new AdRequest();
 request.addKeyword('foobar');
 export default class Users extends Component {
   constructor(props){
    super(props)
+   this.state = { articles: [], refreshing: true, items: [],
+    firebaseImage : ""};
+    this.arrayholder = [];
    const {state} = this.props.navigation;
     console.log(state.params)
     if(state.params)
     {
     console.log(state.params.userdata)
     }
-  this.componentDidMount();
+//  this.componentDidMount();
 }
 
-state = {
-  items: [],
-  firebaseImage : ""
-}
+
   componentDidMount() {
       advert.loadAd(request.build());
 
@@ -55,17 +54,33 @@ setTimeout(() => {
     if(dataSnapshot.val())
     {
       let items = Object.values(newdata);
+      this.arrayholder = items;
      this.setState({items});
+     this.setState({refreshing : false})
     }
       
      });
   }
 
-  makeRemoteRequest = () => {
-   
-    
-  };
-
+  goBack = () => {
+    this.props.navigation.navigate('Welcome')
+  }
+  searchFilterFunction = text => {
+    this.setState({
+       value: text,
+     });
+ 
+     const newData = this.arrayholder.filter(item => {
+       console.log(item, 'item');
+       const itemData = `${item.name}`;
+       const textData = text;
+ 
+       return itemData.indexOf(textData) > -1;
+     });
+     this.setState({
+       items : newData,
+     });
+   };
   
   static navigationOptions = function(props) {
     return {
@@ -80,14 +95,14 @@ setTimeout(() => {
     }
     }
 
-    deleteItem = (val) => {
-    console.log(val)
-     console.log(this.state.items);
-     this.state.items.splice(val, 1);
-     db.ref('/users').child(val.id).remove();
-     this.componentWillReceiveProps();
+    handleRefresh() {
+      this.setState(
+        {
+          refreshing: true
+        },
+        () => this.componentDidMount()
+      );
     }
-      
     
     componentWillReceiveProps(nextProps){
       
@@ -99,44 +114,99 @@ setTimeout(() => {
       
      });
     }
+    renderHeader = () => {
+      return (
+        <SearchBar
+          placeholder="Search Products..."
+          lightTheme
+          round
+          onChangeText={text => this.searchFilterFunction(text)}
+          autoCorrect={false}
+          value={this.state.value}
+        />
+      );
+    };
   render() {
     console.log(this.state.items);
     
     return (
      
       <View style={styles.container} >
-     
+       <View style={styles.toolbar}>
+       <TouchableOpacity onPress={() => this.goBack()}>
+                    <Image style={{width:30,marginLeft:5,  height:30}}source={require('../images/back.png')}></Image>
+                    </TouchableOpacity>
+                    <Text style={styles.toolbarTitle}>Modicare Products</Text>
+                    <Text style={styles.toolbarButton}></Text>
+                </View>
        {this.state.items !== [] ?
           <FlatList
           data={this.state.items}
-          showsVerticalScrollIndicator={false}
+          refreshing={this.state.refreshing}
+          onRefresh={this.handleRefresh.bind(this)}
+          ListHeaderComponent={this.renderHeader}
           renderItem={({item}) =>
-          <View>
-          <View style={styles.flatview} >
-          <View style={{width:'5%'}}></View>
-           <Image
-            source={{ uri: item.photo }}
-            style={{ width: 100, height: 100, borderRadius : 50 }}
-          />
-           <View style={{marginTop:5}}>
-             <View style={{width:'100%'}}>
-            <Text style={styles.name} onPress={() => this.editUser(item)}>{item.name}</Text>
-            </View>
-            </View>   
-          </View>
+          <TouchableNativeFeedback
+          useForeground
+          onPress={() => this.editUser(item)}
+        >
+          <Card
+            featuredTitle={item.name}
+            featuredTitleStyle={styles.featuredTitleStyle}
+            image={{
+              uri: item.photo || defaultImg
+            }}
+          >
             <View style={{flexDirection:'row'}} >
             <View style={{width:'30%'}}></View>
-            <Text style={styles.email}>Qty : {item.age}</Text>
-            <Text> MRP: {item.DateOfBirth} </Text>
+         <Text style={styles.email}>Qty : {item.age}</Text>
+         <Text> MRP: {item.DateOfBirth} </Text>
              <View style={{width:'30%'}}></View>
-            </View>
+           </View>
             <View style={{flexDirection:'row'}}>
-             <View style={{width:'30%'}}></View>
+           <View style={{width:'30%'}}></View>
             <Text> DP : {item.DateOfJoining} </Text>
-             <Text> BV : {item.profile} </Text>
-              <View style={{width:'30%'}}></View>
+            <Text> BV : {item.profile} </Text>
+          <View style={{width:'30%'}}></View>
              </View>
-              </View>
+            {/* <Text style={{ marginBottom: 10 }}>
+              {item.email || 'Read More..'}
+            </Text> */}
+            <Divider style={{ backgroundColor: '#dfe6e9' }} />
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
+              <Text style={styles.noteStyle}>{item.email || 'Read More..'}</Text>
+         
+            </View>
+          </Card>
+        </TouchableNativeFeedback>
+          // <View>
+          // <View style={styles.flatview} >
+          // <View style={{width:'5%'}}></View>
+          //  <Image
+          //   source={{ uri: item.photo }}
+          //   style={{ width: 100, height: 100, borderRadius : 50 }}
+          // />
+          //  <View style={{marginTop:5}}>
+          //    <View style={{width:'100%'}}>
+          //   <Text style={styles.name} onPress={() => this.editUser(item)}>{item.name}</Text>
+          //   </View>
+          //   </View>   
+          // </View>
+          //   <View style={{flexDirection:'row'}} >
+          //   <View style={{width:'30%'}}></View>
+          //   <Text style={styles.email}>Qty : {item.age}</Text>
+          //   <Text> MRP: {item.DateOfBirth} </Text>
+          //    <View style={{width:'30%'}}></View>
+          //   </View>
+          //   <View style={{flexDirection:'row'}}>
+          //    <View style={{width:'30%'}}></View>
+          //   <Text> DP : {item.DateOfJoining} </Text>
+          //    <Text> BV : {item.profile} </Text>
+          //     <View style={{width:'30%'}}></View>
+          //    </View>
+          //     </View>
           }
           keyExtractor={item => item.email}
         />
@@ -157,6 +227,23 @@ setTimeout(() => {
 };
 
 const styles = StyleSheet.create({
+  toolbar:{
+    backgroundColor:'#81c04d',
+    paddingBottom:10,
+    flexDirection:'row' ,
+    paddingTop:20   //Step 1
+},
+toolbarButton:{           //Step 2
+    color:'#fff',
+    textAlign:'center'
+},
+toolbarTitle:{
+    color:'#fff',
+    textAlign:'center',
+    fontWeight:'bold',
+    flex:1,
+    fontSize:20                //Step 3
+},
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -188,5 +275,17 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginTop:  -10,
     alignSelf: 'stretch'
+  },
+  noteStyle: {
+    margin: 5,
+    fontStyle: 'italic',
+    color: '#b2bec3',
+    fontSize: 10
+  },
+  featuredTitleStyle: {
+    marginHorizontal: 5,
+    textShadowColor: '#00000f',
+    textShadowOffset: { width: 3, height: 3 },
+    textShadowRadius: 3
   }
 });

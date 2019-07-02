@@ -105,10 +105,11 @@ android {
         applicationId "com.newadd"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
          multiDexEnabled true
     }
+    
     splits {
         abi {
             reset()
@@ -139,10 +140,8 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-splash-screen')
     implementation project(':react-native-vector-icons')
-    implementation project(':react-native-image-picker')
-    implementation project(':react-native-fetch-blob')
+    implementation project(':react-native-splash-screen')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules

@@ -1,25 +1,17 @@
 import {Platform, StyleSheet, Text, View, Alert, StatusBar, TouchableOpacity,  Image, ScrollView,   PermissionsAndroid,  TouchableHighlight, Button} from 'react-native';
 import React, { Component } from 'react';
 import { db } from './config';
-import t from 'tcomb-form-native';
 import Permissions from 'react-native-permissions'
-import ImagePicker from 'react-native-image-picker';
-import RNFetchBlob from 'react-native-fetch-blob';
 import firebase from 'react-native-firebase';
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import Moment from 'moment';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
-const advert = firebase.admob().interstitial('ca-app-pub-8707066328646930/8992858119')
+const advert = firebase.admob().interstitial('ca-app-pub-8707066328646930/3387680787')
 const request = new AdRequest();
 request.addKeyword('foobar');
-const Form = t.form.Form;
-const User = t.struct({
-  email: t.String,
-  name: t.String,
-  profile: t.String,
-  age: t.Number
-});
+
+
 export default class Add extends Component {
   constructor(props){
     super(props);
@@ -167,7 +159,9 @@ window.Blob = Blob
   }
 
 
-
+  goBack = () => {
+    this.props.navigation.navigate('ScreenOne')
+  }
 
   componentDidMount() {
        advert.loadAd(request.build());
@@ -175,6 +169,7 @@ window.Blob = Blob
 advert.on('onAdLoaded', () => {
   console.log('Advert ready to show.');
 });
+
 
 setTimeout(() => {
   if (advert.isLoaded()) {
@@ -212,7 +207,17 @@ setTimeout(() => {
     'https://satishrao.in/wp-content/uploads/2016/06/dummy-profile-pic-male.jpg'
     console.log(this.state)
     return (
+      <View style={{flex:1}}>
+      <View style={styles.toolbar}>
+      <TouchableOpacity onPress={() => this.goBack()}>
+                    <Image style={{width:30, marginLeft:5, height:30}}source={require('../images/back.png')}></Image>
+                    </TouchableOpacity>
+                    <Text style={styles.toolbarTitle}>{this.state.name}</Text>
+                    <Text style={styles.toolbarButton}></Text>
+                </View>
+      
       <View style={styles.container}>
+        
  <Banner
        style={{alignSelf:'center',marginLeft:20, marginTop:10}}
     size={"LARGE_BANNER"}
@@ -240,6 +245,7 @@ setTimeout(() => {
            </View>
 
         
+    </View>
     </View>
     );
   }
@@ -275,5 +281,18 @@ const styles = StyleSheet.create({
     position : 'absolute',
     bottom : 20,
     alignItems:'center'
-  }
+  },
+  toolbarTitle:{
+    color:'#fff',
+    textAlign:'center',
+    fontWeight:'bold',
+    flex:1,
+    fontSize:20                //Step 3
+},
+  toolbar:{
+    backgroundColor:'#81c04d',
+    paddingBottom:10,
+    flexDirection:'row' ,
+    paddingTop:20   //Step 1
+}
 });
