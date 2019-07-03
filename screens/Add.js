@@ -1,10 +1,7 @@
 import {Platform, StyleSheet, Text, View, Alert, StatusBar, TouchableOpacity,  Image, ScrollView,   PermissionsAndroid,  TouchableHighlight, Button} from 'react-native';
 import React, { Component } from 'react';
 import { db } from './config';
-import Permissions from 'react-native-permissions'
 import firebase from 'react-native-firebase';
-import DateTimePicker from 'react-native-modal-datetime-picker'
-import Moment from 'moment';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
 const advert = firebase.admob().interstitial('ca-app-pub-8707066328646930/3387680787')
@@ -76,87 +73,12 @@ Alert.alert("please fill all details")
 }
   }
 
-  _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
-
-  _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
-
-  _handleDatePicked = (date) => {
-    console.log("date1", date);
-    var newDate = Moment(date).format('DD-MM-YYYY');
-    this.setState({ startDateText:newDate})
-    this._hideDateTimePicker();
-  };
-
-  _showDateTimePicker2 = () => this.setState({ isDateTimePickerVisible2: true });
-
-  _hideDateTimePicker2 = () => this.setState({ isDateTimePickerVisible2: false });
-
-  _handleDatePicked2 = (date) => {
-    var newDate = Moment(date).format('DD-MM-YYYY');
-    this.setState({ endDateText:newDate})
-    this._hideDateTimePicker2();
-  };
- selectPhoto  ()  {
-   
-
   
-    ImagePicker.showImagePicker({title: "", maxWidth: 800, maxHeight: 600}, res => {
-      if (res.didCancel) {
-        console.log("User cancelled!");
-      } else if (res.error) {
-        console.log("Error", res.error);
-      } else {
-        console.log(res);
-        const value = this._form.getValue(); // use that ref to get the form value
-        console.log(value);
-        this.setState({  filePath: res});
-        this.uploadImage(res.uri)
-      }
-    });
 
-
-    
-  }
   
   
 
  
-  uploadImage(uri, mime = 'application/octet-stream') {
-    const Blob = RNFetchBlob.polyfill.Blob
-const fs = RNFetchBlob.fs
-window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-window.Blob = Blob
-    return new Promise((resolve, reject) => {
-      const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
-      let uploadBlob = null
-      let uid = Math.random().toString(36).substring(7);
-      const imageRef = firebase.storage().ref('images').child(uid)
-
-      fs.readFile(uploadUri, 'base64')
-        .then((data) => {
-          return Blob.build(data, { type: `${mime};BASE64` })
-        })
-        .then((blob) => {
-          uploadBlob = blob
-          return imageRef.put(blob, { contentType: mime })
-        })
-        .then(() => {
-          uploadBlob.close()
-          console.log(imageRef.getDownloadURL(), 'downloadUrl')
-         imageRef.getDownloadURL().then((url) => {
-          console.log('uri22', url);
-          this.setState({imageURL : url})
-
-        })
-        })
-        .then((url) => {
-          console.log('uri', uri)
-        })
-        .catch((error) => {
-          console.log(error, 'err')
-      })
-    })
-  }
 
 
   goBack = () => {
