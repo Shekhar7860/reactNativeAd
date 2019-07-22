@@ -4,13 +4,21 @@ import React, { Component } from 'react';
 import firebase from 'react-native-firebase';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
-const advert = firebase.admob().interstitial('ca-app-pub-8707066328646930/8992858119')
+const advert2 = firebase.admob().rewarded('ca-app-pub-9784974231819956/4984604967')
+const advert = firebase.admob().interstitial('ca-app-pub-6061663703850511/9597625632')
 const request = new AdRequest();
 request.addKeyword('foobar');
 export default class Welcome extends Component {
 
   componentDidMount = () => {
     advert.loadAd(request.build());
+    advert2.loadAd(request.build())
+
+    advert2.on('onAdLoaded', () => {
+       console.log('Advert2 ready to show.')
+    })
+    
+    advert2.show()
 
 advert.on('onAdLoaded', () => {
   console.log('Advert ready to show.');
@@ -59,7 +67,7 @@ setTimeout(() => {
        <Banner
        style={{alignSelf:'center',marginLeft:20}}
     size={"LARGE_BANNER"}
-  unitId={"ca-app-pub-8707066328646930/1597815336"}
+  unitId={"ca-app-pub-9784974231819956/2169496096"}
   request={request.build()}
   onAdLoaded={() => {
     console.log('Advert loaded');

@@ -4,7 +4,7 @@ import { db } from './config';
 import firebase from 'react-native-firebase';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
-const advert = firebase.admob().interstitial('ca-app-pub-8707066328646930/3387680787')
+const advert = firebase.admob().interstitial('ca-app-pub-9784974231819956/7230251085')
 const request = new AdRequest();
 request.addKeyword('foobar');
 
@@ -125,6 +125,7 @@ setTimeout(() => {
     title: 'Product'
   }
   render() {
+    console.log('image', this.state.userImage);
     const defaultImg =
     'https://satishrao.in/wp-content/uploads/2016/06/dummy-profile-pic-male.jpg'
     console.log(this.state)
@@ -143,7 +144,7 @@ setTimeout(() => {
  <Banner
        style={{alignSelf:'center',marginLeft:20, marginTop:10}}
     size={"LARGE_BANNER"}
-  unitId={"ca-app-pub-8707066328646930/4480797848"}
+  unitId={"ca-app-pub-9784974231819956/2169496096"}
   request={request.build()}
   onAdLoaded={() => {
     console.log('Advert loaded');

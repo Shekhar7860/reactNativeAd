@@ -5,62 +5,63 @@ import { db } from './config';
 import firebase from 'react-native-firebase';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
-const advert = firebase.admob().interstitial('ca-app-pub-8707066328646930/9890952916')
+const advert = firebase.admob().interstitial('ca-app-pub-9784974231819956/4189154772')
 const request = new AdRequest();
 request.addKeyword('foobar');
 export default class Users extends Component {
   constructor(props){
-   super(props)
-   this.state = { articles: [], refreshing: true, items: [],
-    firebaseImage : ""};
-    this.arrayholder = [];
-   const {state} = this.props.navigation;
-    console.log(state.params)
-    if(state.params)
-    {
-    console.log(state.params.userdata)
-    }
-//  this.componentDidMount();
-}
-
-
-  componentDidMount() {
-      advert.loadAd(request.build());
-
-advert.on('onAdLoaded', () => {
-  console.log('Advert ready to show.');
-});
-
-setTimeout(() => {
-  if (advert.isLoaded()) {
-    console.log('working')
-    advert.show();
-  } else {
-    console.log('error occured')
-  }
-}, 1000);
-    db.ref('/images').child('army').once('value')
-    .then((dataSnapshot) => {
-      
-   console.log('value', dataSnapshot.val().photo)
-    this.setState({firebaseImage: dataSnapshot.val().photo})
-      
-     });
-   
-    db.ref('/users').once('value')
-    .then((dataSnapshot) => {
-      let newdata = dataSnapshot.val();
-    //  console.log(dataSnapshot)
-    if(dataSnapshot.val())
-    {
-      let items = Object.values(newdata);
-      this.arrayholder = items;
-     this.setState({items});
-     this.setState({refreshing : false})
-    }
-      
-     });
-  }
+    super(props)
+    this.state = { articles: [], refreshing: true, items: [],
+     firebaseImage : ""};
+     this.arrayholder = [];
+    const {state} = this.props.navigation;
+     console.log(state.params)
+     if(state.params)
+     {
+     console.log(state.params.userdata)
+     }
+ //  this.componentDidMount();
+ }
+ 
+ 
+   componentDidMount() {
+       advert.loadAd(request.build());
+ 
+ advert.on('onAdLoaded', () => {
+   console.log('Advert ready to show.');
+ });
+ 
+ setTimeout(() => {
+   if (advert.isLoaded()) {
+     console.log('working')
+     advert.show();
+   } else {
+     console.log('error occured')
+   }
+ }, 1000);
+     db.ref('/images').child('army').once('value')
+     .then((dataSnapshot) => {
+       
+    console.log('value', dataSnapshot.val().photo)
+     this.setState({firebaseImage: dataSnapshot.val().photo})
+       
+      });
+    
+     db.ref('/users').once('value')
+     .then((dataSnapshot) => {
+       let newdata = dataSnapshot.val();
+     //  console.log(dataSnapshot)
+     if(dataSnapshot.val())
+     {
+       let items = Object.values(newdata);
+       this.arrayholder = items;
+      this.setState({items});
+      this.setState({refreshing : false})
+     }
+       
+      });
+   }
+  
 
   goBack = () => {
     this.props.navigation.navigate('Welcome')
@@ -104,9 +105,60 @@ setTimeout(() => {
       );
     }
     
+    _ItemLoadMore = () => {
+  
+   
+    db.ref('/users')
+     .orderByKey()
+     .once('value')
+     .then((snapshot) => {
+         console.log('snap1', snapshot.val());
+         let newdata = snapshot.val();
+         //  console.log(dataSnapshot)
+         if(snapshot.val())
+         {
+           let items = Object.values(newdata);
+           this.arrayholder = items;
+          this.setState({items});
+          this.setState({refreshing : false})
+         }
+       // changing to reverse chronological order (latest first)
+       // & removing duplicate
+       let arrayOfKeys = Object.keys(snapshot.val())
+           .sort()
+           .reverse()
+           .slice(1);
+        // transforming to array
+        let results = arrayOfKeys
+           .map((key) => snapshot.val()[key]);
+        // updating reference
+        referenceToOldestKey = arrayOfKeys[arrayOfKeys.length-1];
+        console.log('lastKey', referenceToOldestKey);
+    this.setState({referenceToOldestKey : referenceToOldestKey})
+    console.log('key', this.state.referenceToOldestKey);
+        // Do what you want to do with the data, i.e.
+        // append to page or dispatch({ … }) if using redux
+     })
+     .catch((error) => { } );
+   
+   
+  // db.ref('/users').limitToLast(10).once('value')
+  // .then((dataSnapshot) => {
+  //   let newdata = dataSnapshot.val();
+  // //  console.log(dataSnapshot)
+  // if(dataSnapshot.val())
+  // {
+  //   let items = Object.values(newdata);
+  //   this.arrayholder = items;
+  //  this.setState({items});
+  //  this.setState({refreshing : false})
+  // }
+    
+  //  });
+    }
     componentWillReceiveProps(nextProps){
       
-      db.ref('/users').once('value')
+      db.ref('/users').limit(10).once('value')
     .then((dataSnapshot) => {
       let newdata = dataSnapshot.val();
       let items = Object.values(newdata);
@@ -145,6 +197,11 @@ setTimeout(() => {
           refreshing={this.state.refreshing}
           onRefresh={this.handleRefresh.bind(this)}
           ListHeaderComponent={this.renderHeader}
+          
+          // onRefresh={this.onRefresh}  
+          // refreshing={this.state.refreshing}  
+          // onEndReached={this.loadMore}  
+
           renderItem={({item}) =>
           <TouchableNativeFeedback
           useForeground
@@ -215,7 +272,7 @@ setTimeout(() => {
        <Banner
        style={{alignSelf:'center',marginLeft:20}}
     size={"LARGE_BANNER"}
-  unitId={"ca-app-pub-8707066328646930/7786284317"}
+  unitId={"ca-app-pub-9784974231819956/7934680863"}
   request={request.build()}
   onAdLoaded={() => {
     console.log('Advert loaded');

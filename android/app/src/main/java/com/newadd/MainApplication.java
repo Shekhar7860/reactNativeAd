@@ -1,4 +1,4 @@
-package com.newadd;
+package com.modicareproducts;
 
 import android.app.Application;
 

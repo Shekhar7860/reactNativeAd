@@ -1,4 +1,4 @@
-package com.newadd;
+package com.modicareproducts;
 
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen;
