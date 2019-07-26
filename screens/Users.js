@@ -5,6 +5,7 @@ import { db } from './config';
 import firebase from 'react-native-firebase';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
+
 const advert = firebase.admob().interstitial('ca-app-pub-9784974231819956/4189154772')
 const request = new AdRequest();
 request.addKeyword('foobar');
@@ -25,6 +26,7 @@ export default class Users extends Component {
  
  
    componentDidMount() {
+    
        advert.loadAd(request.build());
  
  advert.on('onAdLoaded', () => {

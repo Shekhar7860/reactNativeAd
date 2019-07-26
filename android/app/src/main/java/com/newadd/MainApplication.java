@@ -11,6 +11,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 import java.util.Arrays;
+import suraj.tiwari.reactnativefbads.FBAdsPackage;
 import java.util.List;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage; 
 import io.invertase.firebase.RNFirebasePackage;
@@ -34,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
           new RNFirebasePackage(),
           new RNFirebaseDatabasePackage(),
           new RNFirebaseStoragePackage(),
+          new FBAdsPackage(),
             new RNFirebaseMessagingPackage()
       );
     }

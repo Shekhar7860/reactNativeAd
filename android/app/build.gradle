@@ -105,8 +105,8 @@ android {
         applicationId "com.modicareproducts"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "1.8"
+        versionCode 10
+        versionName "1.10"
          multiDexEnabled true
     }
     
@@ -140,6 +140,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-fbads')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-splash-screen')
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -148,6 +149,7 @@ dependencies {
   implementation project(':react-native-firebase')
   implementation "com.google.android.gms:play-services-base:16.1.0"
   implementation "com.google.firebase:firebase-core:16.0.9"
+   compile 'com.facebook.android:audience-network-sdk:5.+'
   implementation "com.google.firebase:firebase-database:17.0.0"
    implementation "com.google.firebase:firebase-messaging:18.0.0"
   implementation "com.google.firebase:firebase-ads:17.2.1"

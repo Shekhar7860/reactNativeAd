@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import firebase from 'react-native-firebase';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
+import { InterstitialAdManager, NativeAdsManager,  BannerView, AdSettings  } from 'react-native-fbads';
 const advert2 = firebase.admob().rewarded('ca-app-pub-9784974231819956/4984604967')
 const advert = firebase.admob().interstitial('ca-app-pub-6061663703850511/9597625632')
 const request = new AdRequest();
@@ -11,6 +12,14 @@ request.addKeyword('foobar');
 export default class Welcome extends Component {
 
   componentDidMount = () => {
+    AdSettings.addTestDevice(AdSettings.currentDeviceHash);
+    InterstitialAdManager.showAd("665254733991193_665318663984800")
+  .then(didClick => {
+    console.log('working')
+  })
+  .catch(error => {
+    console.log(error, 'rror')
+  });
     advert.loadAd(request.build());
     advert2.loadAd(request.build())
 
@@ -49,7 +58,12 @@ setTimeout(() => {
                     <Text style={styles.toolbarButton}></Text>
                 </View>
                 <View style={styles.content}>
-
+                <BannerView
+            placementId={"665254733991193_665876810595652"}
+            type="large"
+            onPress={() => console.log('click')}
+            onError={err => console.log('myyyyerror', err)}
+          />
  
                     <View style={styles.messageBox}>
                        
