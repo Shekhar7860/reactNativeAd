@@ -2,7 +2,9 @@ import {Platform, StyleSheet, Text,Image, TouchableOpacity, View, FlatList,ListV
 import React, { Component } from 'react';
 import {  Card, Divider, SearchBar, List, ListItem  } from 'react-native-elements';
 import { db } from './config';
+import { InterstitialAdManager, NativeAdsManager,  BannerView, AdSettings  } from 'react-native-fbads';
 import firebase from 'react-native-firebase';
+
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
 
@@ -27,20 +29,6 @@ export default class Users extends Component {
  
    componentDidMount() {
     
-       advert.loadAd(request.build());
- 
- advert.on('onAdLoaded', () => {
-   console.log('Advert ready to show.');
- });
- 
- setTimeout(() => {
-   if (advert.isLoaded()) {
-     console.log('working')
-     advert.show();
-   } else {
-     console.log('error occured')
-   }
- }, 1000);
      db.ref('/images').child('army').once('value')
      .then((dataSnapshot) => {
        
@@ -92,6 +80,28 @@ export default class Users extends Component {
     }
   };
   editUser = (val) => {
+    AdSettings.addTestDevice(AdSettings.currentDeviceHash);
+      InterstitialAdManager.showAd("665254733991193_665318663984800")
+    .then(didClick => {
+      console.log('working')
+    })
+    .catch(error => {
+      console.log(error, 'rror')
+    });
+       advert.loadAd(request.build());
+ 
+ advert.on('onAdLoaded', () => {
+   console.log('Advert ready to show.');
+ });
+ 
+ setTimeout(() => {
+   if (advert.isLoaded()) {
+     console.log('working')
+     advert.show();
+   } else {
+     console.log('error occured')
+   }
+ }, 1000);
     if(val)
     {
     this.props.navigation.navigate('ScreenTwo', { user: val })

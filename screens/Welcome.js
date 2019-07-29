@@ -13,39 +13,41 @@ export default class Welcome extends Component {
 
   componentDidMount = () => {
     AdSettings.addTestDevice(AdSettings.currentDeviceHash);
-    InterstitialAdManager.showAd("665254733991193_665318663984800")
+  
+   
+  }
+  static navigationOptions = {
+    title: "Welcome"
+  }
+  goToProducts = () => {
+      InterstitialAdManager.showAd("665254733991193_665318663984800")
   .then(didClick => {
     console.log('working')
   })
   .catch(error => {
     console.log(error, 'rror')
   });
-    advert.loadAd(request.build());
-    advert2.loadAd(request.build())
+  advert.loadAd(request.build());
+  advert2.loadAd(request.build())
 
-    advert2.on('onAdLoaded', () => {
-       console.log('Advert2 ready to show.')
-    })
-    
-    advert2.show()
+  advert2.on('onAdLoaded', () => {
+     console.log('Advert2 ready to show.')
+  })
+  
+  advert2.show()
 
 advert.on('onAdLoaded', () => {
-  console.log('Advert ready to show.');
+console.log('Advert ready to show.');
 });
 
 setTimeout(() => {
-  if (advert.isLoaded()) {
-    console.log('working')
-    advert.show();
-  } else {
-    console.log('error occured')
-  }
+if (advert.isLoaded()) {
+  console.log('working')
+  advert.show();
+} else {
+  console.log('error occured')
+}
 }, 1000);
-  }
-  static navigationOptions = {
-    title: "Welcome"
-  }
-  goToProducts = () => {
     this.props.navigation.navigate('ScreenOne' )
   }
   render() {
@@ -58,12 +60,12 @@ setTimeout(() => {
                     <Text style={styles.toolbarButton}></Text>
                 </View>
                 <View style={styles.content}>
-                <BannerView
+                {/* <BannerView
             placementId={"665254733991193_665876810595652"}
             type="large"
             onPress={() => console.log('click')}
             onError={err => console.log('myyyyerror', err)}
-          />
+          /> */}
  
                     <View style={styles.messageBox}>
                        
@@ -158,7 +160,7 @@ const styles = StyleSheet.create({
   },
   footer:{
     position:'absolute',
-    bottom : 20,
+    bottom : 10,
     width : '100%'
   }
   });
