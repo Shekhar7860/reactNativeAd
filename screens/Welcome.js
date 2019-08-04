@@ -1,12 +1,12 @@
-import {Platform, StyleSheet, Text, View, StatusBar, TouchableHighlight} from 'react-native';
+import {Platform, StyleSheet, Text, View, TouchableOpacity, Share,  Image, StatusBar, TouchableHighlight} from 'react-native';
 
 import React, { Component } from 'react';
 import firebase from 'react-native-firebase';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
 import { InterstitialAdManager, NativeAdsManager,  BannerView, AdSettings  } from 'react-native-fbads';
-const advert2 = firebase.admob().rewarded('ca-app-pub-9784974231819956/4984604967')
-const advert = firebase.admob().interstitial('ca-app-pub-6061663703850511/9597625632')
+const advert2 = firebase.admob().rewarded('ca-app-pub-9784974231819956/5819016353')
+const advert = firebase.admob().interstitial('ca-app-pub-9784974231819956/7284921512')
 const request = new AdRequest();
 request.addKeyword('foobar');
 export default class Welcome extends Component {
@@ -19,14 +19,29 @@ export default class Welcome extends Component {
   static navigationOptions = {
     title: "Welcome"
   }
+
+  share = () => {
+    Share.share({
+      message: 'Checkout Modicare Products - https://play.google.com/store/apps/details?id=com.newadd',
+      url: 'https://play.google.com/store/apps/details?id=com.modicareproducts',
+      title: 'Start Your Own Business'
+    }, {
+      // Android only:
+      dialogTitle: 'Share the app',
+      // iOS only:
+      excludedActivityTypes: [
+        'com.apple.UIKit.activity.PostToTwitter'
+      ]
+    })
+  }
   goToProducts = () => {
-      InterstitialAdManager.showAd("665254733991193_665318663984800")
-  .then(didClick => {
-    console.log('working')
-  })
-  .catch(error => {
-    console.log(error, 'rror')
-  });
+  //     InterstitialAdManager.showAd("665254733991193_665318663984800")
+  // .then(didClick => {
+  //   console.log('working')
+  // })
+  // .catch(error => {
+  //   console.log(error, 'rror')
+  // });
   advert.loadAd(request.build());
   advert2.loadAd(request.build())
 
@@ -57,7 +72,9 @@ if (advert.isLoaded()) {
                <View style={styles.toolbar}>
                     <Text style={styles.toolbarButton}></Text>
                     <Text style={styles.toolbarTitle}>Home</Text>
-                    <Text style={styles.toolbarButton}></Text>
+                    <TouchableOpacity style={styles.toolbarButton}onPress={() => this.share()}>
+                    <Image style={{width:30,marginLeft:5,  height:30}} source={require('../images/share.png')}></Image>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.content}>
                 {/* <BannerView
@@ -83,7 +100,7 @@ if (advert.isLoaded()) {
        <Banner
        style={{alignSelf:'center',marginLeft:20}}
     size={"LARGE_BANNER"}
-  unitId={"ca-app-pub-9784974231819956/2169496096"}
+  unitId={"ca-app-pub-9784974231819956/3875379295"}
   request={request.build()}
   onAdLoaded={() => {
     console.log('Advert loaded');
