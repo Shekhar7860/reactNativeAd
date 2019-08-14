@@ -1,10 +1,11 @@
-import {Platform, StyleSheet, Text, View, Alert, StatusBar, TouchableOpacity,  Image, ScrollView,   PermissionsAndroid,  TouchableHighlight, Button} from 'react-native';
+import {Platform, StyleSheet, Text, Share,  View, Alert,StatusBar, TouchableOpacity,  Image, ScrollView,   PermissionsAndroid,  TouchableHighlight, Button} from 'react-native';
 import React, { Component } from 'react';
 import { db } from './config';
 import firebase from 'react-native-firebase';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
 const advert = firebase.admob().interstitial('ca-app-pub-9784974231819956/7104177863')
+const advert2 = firebase.admob().interstitial('ca-app-pub-9784974231819956/5509896728')
 const request = new AdRequest();
 request.addKeyword('foobar');
 
@@ -120,7 +121,33 @@ setTimeout(() => {
       
   }
 
-  
+  share = (name, text, price) => {
+    advert2.loadAd(request.build());
+ 
+    advert2.on('onAdLoaded', () => {
+      console.log('Advert ready to show.');
+    });
+    
+    
+      if (advert2.isLoaded()) {
+        console.log('working')
+        advert2.show();
+      } else {
+        console.log('error occured')
+      }
+    Share.share({
+      message: name + "    " + text + "    " + 'price'  + "=" +  price,
+      url: 'https://play.google.com/store/apps/details?id=com.modicareproducts',
+      title: 'Here is '
+    }, {
+      // Android only:
+      dialogTitle: 'Share the app',
+      // iOS only:
+      excludedActivityTypes: [
+        'com.apple.UIKit.activity.PostToTwitter'
+      ]
+    })
+   }
   static navigationOptions = {
     title: 'Product'
   }
@@ -136,7 +163,9 @@ setTimeout(() => {
                     <Image style={{width:30, marginLeft:5, height:30}}source={require('../images/back.png')}></Image>
                     </TouchableOpacity>
                     <Text style={styles.toolbarTitle}>{this.state.name}</Text>
-                    <Text style={styles.toolbarButton}></Text>
+                    <TouchableOpacity style={styles.toolbarButton} onPress={() => this.share(this.state.name, this.state.userImage, this.state.mrp)}>
+                    <Image style={{width:30,  height:30}} source={require('../images/share.png')}></Image>
+                    </TouchableOpacity>
                 </View>
       
       <View style={styles.container}>
@@ -217,5 +246,11 @@ const styles = StyleSheet.create({
     paddingBottom:10,
     flexDirection:'row' ,
     paddingTop:20   //Step 1
+},
+
+toolbarButton:{
+  width: 50,            //Step 2
+  color:'#fff',
+  textAlign:'center'
 }
 });

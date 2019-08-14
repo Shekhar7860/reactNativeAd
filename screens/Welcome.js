@@ -13,7 +13,27 @@ export default class Welcome extends Component {
 
   componentDidMount = () => {
     AdSettings.addTestDevice(AdSettings.currentDeviceHash);
+    advert.loadAd(request.build());
+  advert2.loadAd(request.build())
+
+  advert2.on('onAdLoaded', () => {
+     console.log('Advert2 ready to show.')
+  })
   
+  advert2.show()
+
+advert.on('onAdLoaded', () => {
+console.log('Advert ready to show.');
+});
+
+setTimeout(() => {
+if (advert.isLoaded()) {
+  console.log('working')
+  advert.show();
+} else {
+  console.log('error occured')
+}
+}, 1000);
    
   }
   static navigationOptions = {
@@ -42,27 +62,7 @@ export default class Welcome extends Component {
   // .catch(error => {
   //   console.log(error, 'rror')
   // });
-  advert.loadAd(request.build());
-  advert2.loadAd(request.build())
 
-  advert2.on('onAdLoaded', () => {
-     console.log('Advert2 ready to show.')
-  })
-  
-  advert2.show()
-
-advert.on('onAdLoaded', () => {
-console.log('Advert ready to show.');
-});
-
-setTimeout(() => {
-if (advert.isLoaded()) {
-  console.log('working')
-  advert.show();
-} else {
-  console.log('error occured')
-}
-}, 1000);
     this.props.navigation.navigate('ScreenOne' )
   }
   render() {

@@ -1,4 +1,4 @@
-import {Platform, StyleSheet, Text,Image, TouchableOpacity, View, FlatList,ListView,  Button,TouchableNativeFeedback,  StatusBar, TouchableHighlight} from 'react-native';
+import {Platform, StyleSheet, Text,Image, TouchableOpacity, View, Share, FlatList,ListView,  Button,TouchableNativeFeedback,  StatusBar, TouchableHighlight} from 'react-native';
 import React, { Component } from 'react';
 import {  Card, Divider, SearchBar, List, ListItem  } from 'react-native-elements';
 import { db } from './config';
@@ -9,6 +9,7 @@ const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
 
 const advert = firebase.admob().interstitial('ca-app-pub-9784974231819956/3931219616')
+const advert2 = firebase.admob().interstitial('ca-app-pub-9784974231819956/4005243369')
 const request = new AdRequest();
 request.addKeyword('foobar');
 export default class Users extends Component {
@@ -28,7 +29,20 @@ export default class Users extends Component {
  
  
    componentDidMount() {
+    advert.loadAd(request.build());
+ 
+    advert.on('onAdLoaded', () => {
+      console.log('Advert ready to show.');
+    });
     
+    setTimeout(() => {
+      if (advert.isLoaded()) {
+        console.log('working')
+        advert.show();
+      } else {
+        console.log('error occured')
+      }
+    }, 1000);
      db.ref('/images').child('army').once('value')
      .then((dataSnapshot) => {
        
@@ -79,6 +93,35 @@ export default class Users extends Component {
      // headerRight: <View  style={{marginRight: 20, paddingTop:5}}><Icon name="ios-add" size={30} onPress={() => props.navigation.navigate('ScreenTwo')}   /></View>
     }
   };
+
+  share = (name, text, price) => {
+    advert2.loadAd(request.build());
+ 
+    advert2.on('onAdLoaded', () => {
+      console.log('Advert ready to show.');
+    });
+    
+    
+      if (advert2.isLoaded()) {
+        console.log('working')
+        advert2.show();
+      } else {
+        console.log('error occured')
+      }
+   
+    Share.share({
+      message: name + "    " + text + "    " + 'price'  + "=" +  price,
+      url: 'https://play.google.com/store/apps/details?id=com.modicareproducts',
+      title: 'Here is '
+    }, {
+      // Android only:
+      dialogTitle: 'Share the app',
+      // iOS only:
+      excludedActivityTypes: [
+        'com.apple.UIKit.activity.PostToTwitter'
+      ]
+    })
+   }
   editUser = (val) => {
     // AdSettings.addTestDevice(AdSettings.currentDeviceHash);
     //   InterstitialAdManager.showAd("665254733991193_665318663984800")
@@ -88,20 +131,7 @@ export default class Users extends Component {
     // .catch(error => {
     //   console.log(error, 'rror')
     // });
-       advert.loadAd(request.build());
- 
- advert.on('onAdLoaded', () => {
-   console.log('Advert ready to show.');
- });
- 
- setTimeout(() => {
-   if (advert.isLoaded()) {
-     console.log('working')
-     advert.show();
-   } else {
-     console.log('error occured')
-   }
- }, 1000);
+      
     if(val)
     {
     this.props.navigation.navigate('ScreenTwo', { user: val })
@@ -238,9 +268,9 @@ export default class Users extends Component {
             <Text> BV : {item.profile} </Text>
           <View style={{width:'30%'}}></View>
              </View>
-            {/* <Text style={{ marginBottom: 10 }}>
-              {item.email || 'Read More..'}
-            </Text> */}
+             <TouchableHighlight style={styles.fullWidthButton} onPress={() => this.share(item.name, item.photo, item.DateOfBirth)}>
+            <Text style={styles.fullWidthButtonText}>Share</Text>
+            </TouchableHighlight>
             <Divider style={{ backgroundColor: '#dfe6e9' }} />
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
@@ -325,6 +355,9 @@ toolbarTitle:{
     fontSize: 36,
     fontWeight: 'bold',
   },
+  fullWidthButtonText: {
+    color: 'white'
+  },
   flatview: {
    
     paddingTop: 30,
@@ -356,5 +389,15 @@ toolbarTitle:{
     textShadowColor: '#00000f',
     textShadowOffset: { width: 3, height: 3 },
     textShadowRadius: 3
-  }
+  },
+  fullWidthButton: {
+    backgroundColor: 'blue',
+    height:30,
+    width:'30%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color:'white',
+    marginTop:-20
+  },
 });
