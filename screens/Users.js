@@ -8,8 +8,8 @@ import firebase from 'react-native-firebase';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
 
-const advert = firebase.admob().interstitial('ca-app-pub-2457999726327943/3960768452')
-const advert2 = firebase.admob().interstitial('ca-app-pub-2457999726327943/6395360103')
+const advert = firebase.admob().interstitial('ca-app-pub-9904949768080901/9492176596')
+const advert2 = firebase.admob().interstitial('ca-app-pub-9904949768080901/9681886466')
 const request = new AdRequest();
 request.addKeyword('foobar');
 export default class Users extends Component {
@@ -314,7 +314,7 @@ export default class Users extends Component {
        <Banner
        style={{alignSelf:'center',marginLeft:25}}
     size={"SMALL_BANNER"}
-  unitId={"ca-app-pub-2457999726327943/7067591174"}
+  unitId={"ca-app-pub-9904949768080901/9877327581"}
   request={request.build()}
   onAdLoaded={() => {
     console.log('Advert loaded');
