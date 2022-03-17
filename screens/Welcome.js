@@ -54,16 +54,14 @@ if (advert.isLoaded()) {
       ]
     })
   }
-  goToProducts = () => {
-  //     InterstitialAdManager.showAd("665254733991193_665318663984800")
-  // .then(didClick => {
-  //   console.log('working')
-  // })
-  // .catch(error => {
-  //   console.log(error, 'rror')
-  // });
-
-    this.props.navigation.navigate('ScreenOne' )
+  goToProducts = (val) => {
+    if(val == 'screenone')
+    {
+    this.props.navigation.navigate('ScreenOne')
+    }
+    else {
+      this.props.navigation.navigate('ScreenInfo')
+    }
   }
   render() {
     const { navigate } = this.props.navigation
@@ -89,19 +87,21 @@ if (advert.isLoaded()) {
                             <Text style={styles.topText}>Welcome Mesage</Text>
                        
                             <Text style={styles.messageBoxBodyText}>Hello everyone, Here is an application that can help you knowing about specific prices list, business volume points and quantity of modicare products. You can check the pictures of products as well as search for a specific modicare product. All of these products are available at the modicare distribution point. So, To get started, click on the button below</Text>
-                            <TouchableHighlight style={styles.fullWidthButton} onPress={() => this.goToProducts()}>
-            <Text style={styles.fullWidthButtonText}>Let's get started</Text>
-            </TouchableHighlight>
-            <Text style={styles.messageBoxBodyText2}>If you have any query related to modicare, you can call me +919646407363 (यदि आपके पास मोडिकेयर से संबंधित कोई क्वेरी है, तो आप मुझे +919646407363 पर कॉल कर सकते हैं)</Text>
+                            <TouchableHighlight style={styles.fullWidthButton} onPress={() => this.goToProducts('screenone')}>
+                            <Text style={styles.fullWidthButtonText}>Let's get started</Text>
+                            </TouchableHighlight>
+                            <TouchableHighlight style={{...styles.fullWidthButton, marginTop : 20}} onPress={() => this.goToProducts('screentwo')}>
+                            <Text style={styles.fullWidthButtonText}>Get More Information</Text>
+                            </TouchableHighlight>
+            {/* <Text style={styles.messageBoxBodyText2}>If you have any query related to modicare, you can call me +919646407363 (यदि आपके पास मोडिकेयर से संबंधित कोई क्वेरी है, तो आप मुझे +919646407363 पर कॉल कर सकते हैं)</Text> */}
      
                     </View>
-
                 </View>
                 <View style={styles.footer}>
        <Banner
        style={{alignSelf:'center',marginLeft:20}}
     size={"SMALL_BANNER"}
-  unitId={"ca-app-pub-9904949768080901/6646521403"}
+  unitId={"ca-app-pub-3550043356338169/3597148865"}
   request={request.build()}
   onAdLoaded={() => {
     console.log('Advert loaded');

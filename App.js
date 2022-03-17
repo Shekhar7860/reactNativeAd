@@ -18,17 +18,21 @@ import Users from './screens/Users';
 import Add from './screens/Add'
 import Welcome from './screens/Welcome'
 import Edit from './screens/Edit'
-
+import Info from './screens/Info'
+import PdfScreen from './screens/PdfScreen';
 const AppNavigator = StackNavigator({
     Welcome: { screen: Welcome
   },
     ScreenOne: { screen: Users},
+    ScreenInfo: {screen: Info},
     ScreenTwo: { screen: Add},
-    ScreenThree: {screen: Edit}
+    ScreenThree: {screen: Edit},
+    Pdf: {screen: PdfScreen}
 }, { headerMode: 'none' })
 
 export default class App extends Component {
   componentDidMount() {
+    console.disableYellowBox = true;
     SplashScreen.hide()
   }
   render() {
