@@ -1,10 +1,11 @@
-import {Platform, StyleSheet, Text, View, TouchableOpacity, Share,  Image, StatusBar, TouchableHighlight} from 'react-native';
-
+import {Alert, Image, Platform, Share, StatusBar, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View} from 'react-native';
 import React, { Component } from 'react';
+
 import firebase from 'react-native-firebase';
+
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
-import { InterstitialAdManager, NativeAdsManager,  BannerView, AdSettings  } from 'react-native-fbads';
+
 const advert2 = firebase.admob().rewarded('ca-app-pub-9904949768080901/8338877026')
 const advert = firebase.admob().interstitial('ca-app-pub-9904949768080901/6454949715')
 const request = new AdRequest();
@@ -12,7 +13,7 @@ request.addKeyword('foobar');
 export default class Welcome extends Component {
 
   componentDidMount = () => {
-    AdSettings.addTestDevice(AdSettings.currentDeviceHash);
+   
     advert.loadAd(request.build());
   advert2.loadAd(request.build())
 
@@ -101,10 +102,10 @@ if (advert.isLoaded()) {
        <Banner
        style={{alignSelf:'center',marginLeft:20}}
     size={"SMALL_BANNER"}
-  unitId={"ca-app-pub-3550043356338169/3597148865"}
+  unitId={"ca-app-pub-3550043356338169/8065326732"}
   request={request.build()}
   onAdLoaded={() => {
-    console.log('Advert loaded');
+    Alert.alert('hi')
   }} />
   </View>
             </View>

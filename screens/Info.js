@@ -1,6 +1,14 @@
+import { Card, Divider, List, ListItem, SearchBar } from 'react-native-elements';
+import {Image, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View} from 'react-native'
+
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, Image, TouchableHighlight} from 'react-native'
-import {  Card, Divider, SearchBar, List, ListItem  } from 'react-native-elements';
+import firebase from 'react-native-firebase';
+
+const AdRequest = firebase.admob.AdRequest;
+
+const advert = firebase.admob().interstitial('ca-app-pub-3550043356338169/3833572689')
+const request = new AdRequest();
+request.addKeyword('foobar');
 const Info = ({navigation}) => {
 const goBack = () => {
 navigation.goBack()
@@ -8,6 +16,20 @@ navigation.goBack()
 
 
 const openPdf = () => {
+  advert.loadAd(request.build());
+ 
+    advert.on('onAdLoaded', () => {
+      console.log('Advert ready to show.');
+    });
+    
+    setTimeout(() => {
+      if (advert.isLoaded()) {
+        console.log('working')
+        advert.show();
+      } else {
+        console.log('error occured')
+      }
+    }, 1000);
 navigation.navigate('Pdf')
 }
 return( <View style={styles.mainContainer}>
@@ -21,7 +43,7 @@ return( <View style={styles.mainContainer}>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.content}>
-                <Text>Info </Text>
+                <Text style={{marginTop : 20, fontWeight : '800'}}>Get Information About Modicare Products </Text>
                 <TouchableHighlight style={{...styles.fullWidthButton, marginTop : 20}} onPress={() => openPdf()}>
                             <Text style={styles.fullWidthButtonText}>Open Product Catalogue</Text>
                             </TouchableHighlight></View>

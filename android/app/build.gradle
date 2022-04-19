@@ -94,6 +94,9 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
+    packagingOptions {
+    pickFirst '**/*.so'
+}
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
@@ -140,7 +143,8 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-fbads')
+   compile project(':react-native-fetch-blob')  
+    compile project(':react-native-pdf')  
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-splash-screen')
     implementation fileTree(dir: "libs", include: ["*.jar"])

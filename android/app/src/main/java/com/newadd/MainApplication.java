@@ -11,12 +11,13 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 import java.util.Arrays;
-import suraj.tiwari.reactnativefbads.FBAdsPackage;
 import java.util.List;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage; 
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
+import com.RNFetchBlob.RNFetchBlobPackage;   
+import org.wonday.pdf.RCTPdfView;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -35,8 +36,8 @@ public class MainApplication extends Application implements ReactApplication {
           new RNFirebasePackage(),
           new RNFirebaseDatabasePackage(),
           new RNFirebaseStoragePackage(),
-          new FBAdsPackage(),
-            new RNFirebaseMessagingPackage()
+            new RNFirebaseMessagingPackage(),
+             new RNFetchBlobPackage(), new RCTPdfView()          
       );
     }
 
